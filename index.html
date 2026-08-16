@@ -1037,14 +1037,8 @@
 
   setTimeout(translatePage, 100);
 
-  const observer = new MutationObserver(() => {
-    translatePage();
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  // Keine permanente Beobachtung nötig.
+// Übersetzung wird beim Start und beim Sprachwechsel ausgeführt.
 })();
 </script>
 </body>
