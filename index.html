@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -813,6 +813,237 @@
       navigator.serviceWorker.register('service-worker.js').catch(() => {});
     });
   }
+</script>
+  <script>
+(function () {
+  const translations = {
+    de: {
+      "Wer spielt?": "Wer spielt?",
+      "+ Spiel eintragen": "+ Spiel eintragen",
+      "Trag dein Match ein, sag welches Level du suchst und wie viele Mitspieler noch fehlen. Andere Spieler:innen in der Nähe schließen sich direkt an.":
+        "Trag dein Match ein, sag welches Level du suchst und wie viele Mitspieler noch fehlen. Andere Spieler:innen in der Nähe schließen sich direkt an.",
+      "Dein Name": "Dein Name",
+      "z.B. Alex": "z.B. Alex",
+      "Alle": "Alle",
+      "Anfänger": "Anfänger",
+      "Mittel": "Mittel",
+      "Fortgeschritten": "Fortgeschritten",
+      "Profi": "Profi",
+      "Neues Spiel": "Neues Spiel",
+      "Datum": "Datum",
+      "Uhrzeit": "Uhrzeit",
+      "Ort / Platz": "Ort / Platz",
+      "Level gesucht": "Level gesucht",
+      "Gesuchte Spieler": "Gesuchte Spieler",
+      "Notiz (optional)": "Notiz (optional)",
+      "Spiel eintragen": "Spiel eintragen",
+      "Abbrechen": "Abbrechen",
+      "Noch keine Spiele in Sicht": "Noch keine Spiele in Sicht",
+      "Leg als Erste:r los und trag ein Match ein.": "Leg als Erste:r los und trag ein Match ein.",
+      "Mitspielen": "Mitspielen",
+      "Verlassen": "Verlassen",
+      "Löschen": "Löschen",
+      "Voll": "Voll",
+      "Dabei": "Dabei",
+      "Dein Spiel": "Dein Spiel"
+    },
+
+    en: {
+      "Wer spielt?": "Who’s playing?",
+      "+ Spiel eintragen": "+ Create match",
+      "Trag dein Match ein, sag welches Level du suchst und wie viele Mitspieler noch fehlen. Andere Spieler:innen in der Nähe schließen sich direkt an.":
+        "Create your match, choose the level and say how many players are still needed. Nearby players can join directly.",
+      "Dein Name": "Your name",
+      "z.B. Alex": "e.g. Alex",
+      "Alle": "All",
+      "Anfänger": "Beginner",
+      "Mittel": "Intermediate",
+      "Fortgeschritten": "Advanced",
+      "Profi": "Pro",
+      "Neues Spiel": "New match",
+      "Datum": "Date",
+      "Uhrzeit": "Time",
+      "Ort / Platz": "Location / Court",
+      "Level gesucht": "Level wanted",
+      "Gesuchte Spieler": "Players needed",
+      "Notiz (optional)": "Note (optional)",
+      "Spiel eintragen": "Create match",
+      "Abbrechen": "Cancel",
+      "Noch keine Spiele in Sicht": "No matches yet",
+      "Leg als Erste:r los und trag ein Match ein.": "Be the first to create a match.",
+      "Mitspielen": "Join",
+      "Verlassen": "Leave",
+      "Löschen": "Delete",
+      "Voll": "Full",
+      "Dabei": "Joined",
+      "Dein Spiel": "Your match"
+    },
+
+    el: {
+      "Wer spielt?": "Ποιος παίζει;",
+      "+ Spiel eintragen": "+ Δημιουργία αγώνα",
+      "Trag dein Match ein, sag welches Level du suchst und wie viele Mitspieler noch fehlen. Andere Spieler:innen in der Nähe schließen sich direkt an.":
+        "Δημιούργησε τον αγώνα σου, επίλεξε επίπεδο και δήλωσε πόσοι παίκτες λείπουν. Παίκτες κοντά σου μπορούν να συμμετάσχουν άμεσα.",
+      "Dein Name": "Το όνομά σου",
+      "z.B. Alex": "π.χ. Alex",
+      "Alle": "Όλα",
+      "Anfänger": "Αρχάριος",
+      "Mittel": "Μεσαίο",
+      "Fortgeschritten": "Προχωρημένος",
+      "Profi": "Pro",
+      "Neues Spiel": "Νέος αγώνας",
+      "Datum": "Ημερομηνία",
+      "Uhrzeit": "Ώρα",
+      "Ort / Platz": "Τοποθεσία / Γήπεδο",
+      "Level gesucht": "Επίπεδο",
+      "Gesuchte Spieler": "Παίκτες που λείπουν",
+      "Notiz (optional)": "Σημείωση (προαιρετικά)",
+      "Spiel eintragen": "Δημιουργία αγώνα",
+      "Abbrechen": "Ακύρωση",
+      "Noch keine Spiele in Sicht": "Δεν υπάρχουν αγώνες ακόμα",
+      "Leg als Erste:r los und trag ein Match ein.": "Γίνε ο πρώτος που θα δημιουργήσει έναν αγώνα.",
+      "Mitspielen": "Συμμετοχή",
+      "Verlassen": "Αποχώρηση",
+      "Löschen": "Διαγραφή",
+      "Voll": "Πλήρες",
+      "Dabei": "Συμμετέχεις",
+      "Dein Spiel": "Ο αγώνας σου"
+    }
+  };
+
+  const originalTexts = new WeakMap();
+
+  function detectLanguage() {
+    const saved = localStorage.getItem("padel-language");
+    if (saved) return saved;
+
+    const lang = (navigator.language || "").toLowerCase();
+    if (lang.startsWith("el")) return "el";
+    if (lang.startsWith("de")) return "de";
+    return "en";
+  }
+
+  let currentLanguage = detectLanguage();
+
+  function translatePage() {
+    document.documentElement.lang = currentLanguage;
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT
+    );
+
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      const parent = node.parentElement;
+      if (!parent || parent.closest("#pm-language-switcher")) return;
+      if (parent.tagName === "SCRIPT" || parent.tagName === "STYLE") return;
+
+      if (!originalTexts.has(node)) {
+        originalTexts.set(node, node.nodeValue);
+      }
+
+      const original = originalTexts.get(node);
+      const trimmed = original.trim();
+
+      if (translations[currentLanguage][trimmed]) {
+        const leading = original.match(/^\s*/)[0];
+        const trailing = original.match(/\s*$/)[0];
+
+        node.nodeValue =
+          leading +
+          translations[currentLanguage][trimmed] +
+          trailing;
+      }
+    });
+
+    document.querySelectorAll("input, textarea").forEach(el => {
+      if (!el.dataset.originalPlaceholder) {
+        el.dataset.originalPlaceholder = el.placeholder || "";
+      }
+
+      const original = el.dataset.originalPlaceholder;
+      if (translations[currentLanguage][original]) {
+        el.placeholder = translations[currentLanguage][original];
+      }
+    });
+
+    updateButtons();
+  }
+
+  function updateButtons() {
+    document.querySelectorAll("#pm-language-switcher button").forEach(btn => {
+      btn.style.background =
+        btn.dataset.lang === currentLanguage ? "#DFFF3D" : "#FFFFFF";
+    });
+  }
+
+  function createLanguageSwitcher() {
+    const box = document.createElement("div");
+    box.id = "pm-language-switcher";
+
+    Object.assign(box.style, {
+      position: "fixed",
+      top: "12px",
+      right: "12px",
+      zIndex: "99999",
+      display: "flex",
+      gap: "5px",
+      padding: "5px",
+      background: "rgba(255,255,255,0.92)",
+      border: "2px solid #06262C",
+      borderRadius: "30px",
+      boxShadow: "2px 2px 0 #06262C"
+    });
+
+    [
+      ["de", "DE"],
+      ["el", "ΕΛ"],
+      ["en", "EN"]
+    ].forEach(([lang, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.lang = lang;
+      button.textContent = label;
+
+      Object.assign(button.style, {
+        border: "0",
+        borderRadius: "20px",
+        padding: "7px 10px",
+        fontWeight: "800",
+        cursor: "pointer",
+        color: "#06262C"
+      });
+
+      button.addEventListener("click", () => {
+        currentLanguage = lang;
+        localStorage.setItem("padel-language", lang);
+
+        /* Seite neu laden, damit auch dynamische Inhalte sauber übersetzt werden */
+        location.reload();
+      });
+
+      box.appendChild(button);
+    });
+
+    document.body.appendChild(box);
+  }
+
+  createLanguageSwitcher();
+
+  setTimeout(translatePage, 100);
+
+  const observer = new MutationObserver(() => {
+    translatePage();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+})();
 </script>
 </body>
 </html>
