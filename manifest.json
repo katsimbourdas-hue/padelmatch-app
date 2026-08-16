@@ -1,6 +1,6 @@
 {
-  "name": "PadelMatch",
-  "short_name": "PadelMatch",
+  "name": "PadelRadar",
+  "short_name": "PadelRadar",
   "description": "Padel-Spiele eintragen und Mitspieler finden",
   "start_url": "./index.html",
   "scope": "./",
