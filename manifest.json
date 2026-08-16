@@ -1,0 +1,15 @@
+{
+  "name": "PadelMatch",
+  "short_name": "PadelMatch",
+  "description": "Padel-Spiele eintragen und Mitspieler finden",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#00C2D6",
+  "theme_color": "#0093A8",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
