@@ -416,6 +416,19 @@
   @media (prefers-reduced-motion: reduce) {
     #padelmatch-root * { animation: none !important; transition: none !important; }
   }
+.pm-bottom-image {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 600px) {
+  .pm-bottom-image {
+    height: 280px;
+  }
+}
 </style>
 
 </head>
@@ -1033,5 +1046,6 @@
 // Übersetzung wird beim Start und beim Sprachwechsel ausgeführt.
 })();
 </script>
+<img src="app.png" alt="Padel-Spieler" class="pm-bottom-image">
 </body>
 </html>
